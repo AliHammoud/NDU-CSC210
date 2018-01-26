@@ -1,5 +1,6 @@
 global random_counts
-random_counts = range(20)
+random_counts = [0] * 20
+
 
 def setup():
     size(640, 240)
@@ -15,4 +16,4 @@ def draw():
     w = width/len(random_counts)
     
     for x in range(len(random_counts)):
-        rect(x * w, height - random_counts[x], w - 1, random_counts[x])
+        rect(x * w, height - random_counts[x], w, random_counts[x])
