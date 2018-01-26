@@ -1,7 +1,6 @@
 global random_counts
 random_counts = [0] * 20
 
-
 def setup():
     size(640, 240)
     
