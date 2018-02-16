@@ -19,7 +19,7 @@ class PVector:
     def div(self, val):
         self.x *= val
         self.y *= val
-        
+    
     def mag(self):
         return sqrt(self.x * self.x + self.y * self.y)
         
@@ -37,13 +37,12 @@ def draw():
     center = PVector(width/2, height/2)
     mouse = PVector(mouseX, mouseY)
     mouse.sub(center)
-    mouse.mult(0.5)
-    print(mouse.mag())
-    
+
     translate(width/2, height/2)
 
     stroke(noise(mouseX) * 255, noise(mouseY) * 255, noise(center.x) * 255, random(255))
     line(0, 0, mouse.x, mouse.y)
+    
     
 
     
