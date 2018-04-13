@@ -1,20 +1,35 @@
 import copy
 import random
 
-#ruleset = [0, 1, 0, 1, 1, 0, 1, 0]
-ruleset = [random.randint(0,1) for num in range(8)]
+size(512, 512)
 
-#cells = [1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0]
-#cells = [1] * 512
-cells = [random.randint(0,1) for num in range(512)]
+#sierpinski triangle
+'''
+c_width = 2
+epochs = width/c_width
+ruleset = [0, 1, 0, 1, 1, 0, 1, 0]
+cells = [0] * (width/c_width)
+cells [len(cells)/2] = 1
+'''
+
+#random rules and cells
+'''
+c_width = 2
+epochs = width/c_width
+ruleset = [random.randint(0,1) for num in range(8)]
+cells = [random.randint(0,1) for num in range(epochs)]
+'''
+
+#8-bit avatar generator
+c_width = 64
+epochs = width/c_width
+ruleset = [random.randint(0,1) for num in range(8)]
+cells = [random.randint(0,1) for num in range(8)]
 
 new_cells = []
 
 background(0)
 noStroke()
-c_width = 2
-size(512, 512)
-epochs = 256
 
 def rules(a, b, c):
     
@@ -43,12 +58,13 @@ for x in range(epochs):
     
     for i in range(len(cells)):
         if cells[i] == 1: 
-            #fill(255)
-            fill(int(random.randint(0, 255)), int(random.randint(0, 255)), int(random.randint(0, 255)), int(random.randint(0, 255)))
+            fill(255)
+            #fill(int(random.randint(0, 255)), int(random.randint(0, 255)), int(random.randint(0, 255)), int(random.randint(0, 255)))
         else:
             fill(0)
             
         rect(i * c_width, c_width * x, c_width, c_width)
+        #ellipse(i * c_width, c_width * x, c_width, c_width)
     
     for i in range(1, len(cells) - 1):
         left = cells[i - 1]
