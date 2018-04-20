@@ -1,64 +1,89 @@
-_columns = 256
-_rows = 128
+import random
+import copy
 
-#_columns = 10
-#_rows = 10
+cell_w = 6
+cell_h = 6
 
-box_width = 4
+def init(empty = False):
 
-size(1025, 512)
-background(0)
-fill(0)
+    matrix = [
+        [random.randint(0, 1)  if empty == False else 0 for n in range(cell_count_h)] 
+        for m in range(cell_count_v)
+    ]
+    
+    return matrix
 
-board = [[0] * _rows] * _columns
-next  = [[0] * _rows] * _columns
+def print_matrix(matrix, console = False):
 
-def render(_board):
-    for i in range(len(_board)):
-        for j in range(len(_board[i])):
-            if _board[i][j] == 1:
-                fill (255)
-            elif _board[i][j] == 0:
-                fill (0)
+    for column in range(len(matrix)):
+        if console:
+            print(matrix[column])
+
+        for row in range(len(matrix[column])):
+
+            if matrix[row][column] == 1:
+                fill(255)
+            elif matrix[row][column] == 0:
+                fill(0)
+
+            rect(column * cell_w,
+                 row * cell_h,
+                 cell_w,
+                 cell_h)
+            
+    if console:
+        print('')
+
+def count_neighbours(matrix, index):
+    count = 0
+
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+
+            if matrix[index[0] + i][index[1] + j] == 1:
+                count += 1
+
+    if matrix[index[0]][index[1]] == 1:
+        count -= 1
+
+    return count
+
+def generate(matrix):
+    for column in range(1, len(matrix) - 1):
+        for row in range(1, len(matrix[column]) - 1):
+            
+            #Loneliness = cell dies
+            if count_neighbours(matrix, (row, column)) < 2 and matrix[row][column] == 1:
+                next[row][column] = 0
                 
-            rect(
-                i * box_width, 
-                j * box_width, 
-                box_width,
-                box_width
-                )
-
-for row in range (1, len(board) - 1):
-    for column in range(1, len(board[row]) - 1):
-        board[row][column] = int(random(2))
-        
-        if board[row][column] == 1:
-            fill (255)
-        elif board[row][column] == 0:
-            fill (0)
+            #Overpopulation = cell dies
+            elif count_neighbours(matrix, (row, column)) > 3 and matrix[row][column] == 1:
+                next[row][column] = 0
+            
+            #Reproduction = cell is revived
+            elif count_neighbours(matrix, (row, column)) == 3 and matrix[row][column] == 0:
+                next[row][column] = 1
                 
-            rect(
-                column * box_width, 
-                row * box_width, 
-                box_width,
-                box_width
-                )
+            #Stasis
+            else:
+                next[row][column] = board[row][column]
 
-for row in range (1, len(board) - 1):
-    for column in range(1, len(board[row]) - 1):
-        
-        neighbours = 0
-        
-        for i in range (-1, 1):
-                for j in range (-1, 1):
-                    neighbours += board[row + j][column + i]
-                    
-        neighbours -= board[row][column]
-        
-        if   board[row][column] == 1 and neighbours <  2: next[row][column] = 0
-        elif board[row][column] == 1 and neighbours >  3: next[row][column] = 0
-        elif board[row][column] == 0 and neighbours == 3: next[row][column] = 1
-        else: next[row][column] = board[row][column]
-
-
-board = next
+def setup():
+    size(512, 512)
+    background(0)
+    
+    global cell_w, cell_h, cell_count_h, cell_count_v, board, next
+    
+    cell_count_h = width / cell_w
+    cell_count_v = height / cell_h
+    
+    board = init()
+    next = init(True)
+    
+def draw():
+    
+    global cell_w, cell_h, cell_count_h, cell_count_v, board, next
+    
+    generate(board)
+    board = copy.deepcopy(next)
+    print_matrix(next)
