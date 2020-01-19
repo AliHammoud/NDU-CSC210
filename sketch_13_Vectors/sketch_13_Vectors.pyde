@@ -8,7 +8,7 @@ class PVector:
         self.x += b.x
         self.y += b.y
         
-location = PVector(width/2, height/2)
+location = PVector(0, 0)
 velocity = PVector(3, 5)
     
 def setup():
@@ -20,5 +20,5 @@ def draw():
     
     global location
     global velocity
-    location += velocity
+    location.add(velocity)
     
